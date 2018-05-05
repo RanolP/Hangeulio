@@ -2,13 +2,11 @@
 
 package io.github.ranolp.hangeulio
 
-fun isConsonant(char: Char): Boolean {
-    TODO("")
-}
+import io.github.ranolp.hangeulio.vo.HangeulPhoneme
 
-fun isVowel(char: Char): Boolean {
-    TODO("")
-}
+fun isConsonant(char: Char): Boolean = HangeulPhoneme(char).isConsonant
+
+fun isVowel(char: Char): Boolean = HangeulPhoneme(char).isVowel
 
 @Deprecated("Jaeum is 자음's phonetic, So, use isConsonant instead.", ReplaceWith("isConsonant(char)"))
 fun isJaeum(char: Char): Boolean = isConsonant(char)
