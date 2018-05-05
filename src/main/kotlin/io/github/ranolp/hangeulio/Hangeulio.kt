@@ -8,6 +8,23 @@ fun isConsonant(char: Char): Boolean = HangeulPhoneme(char).isConsonant
 
 fun isVowel(char: Char): Boolean = HangeulPhoneme(char).isVowel
 
+fun isPhoneme(char: Char): Boolean =
+    when (char) {
+        in HALFWIDTH_HANGUL_LETTER_CONSONANT,
+        in HANGUL_LETTER_CONSONANT,
+        in HALFWIDTH_HANGUL_LETTER_VOWEL,
+        in HANGUL_LETTER_VOWEL,
+        in HANGUL_ONSET_MODERN,
+        in HANGUL_ONSET_OLD,
+        in HANGUL_CODA_MODERN,
+        in HANGUL_CODA_OLD,
+        in HANGUL_NUCLEUS_MODERN,
+        in HANGUL_NUCLEUS_OLD,
+        in PARENTHESIZED_HANGUL_LETTERS,
+        in CIRCLED_HANGUL_LETTERS -> true
+        else -> false
+    }
+
 @Deprecated("Jaeum is 자음's phonetic, So, use isConsonant instead.", ReplaceWith("isConsonant(char)"))
 fun isJaeum(char: Char): Boolean = isConsonant(char)
 
