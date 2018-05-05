@@ -39,7 +39,7 @@ class HangeulPhonemeTest {
         assertEquals(halfWidthGiyeok.keyboardSet, KeyboardSet.TWO_SET)
 
         assertEquals(onsetGiyeok.char, 'ᄀ')
-        assertEquals(onsetGiyeok.toCompatibleConsonant?.char, 'ㄱ')
+        assertEquals(onsetGiyeok.toCompatiblePhonome?.char, 'ㄱ')
         assertTrue(onsetGiyeok.isConsonant)
         assertTrue(onsetGiyeok.isModern)
         assertEquals(onsetGiyeok.keyboardSet, KeyboardSet.THREE_SET)
@@ -50,13 +50,13 @@ class HangeulPhonemeTest {
         assertEquals(a.keyboardSet, KeyboardSet.TWO_SET)
 
         assertEquals(nucleusA.char, 'ᅡ')
-        assertEquals(nucleusA.toCompatibleConsonant?.char, 'ㅏ')
+        assertEquals(nucleusA.toCompatiblePhonome?.char, 'ㅏ')
         assertTrue(nucleusA.isVowel)
         assertTrue(nucleusA.isModern)
         assertEquals(nucleusA.keyboardSet, KeyboardSet.THREE_SET)
 
         assertEquals(codaGiyeok.char, 'ᆨ')
-        assertEquals(codaGiyeok.toCompatibleConsonant?.char, 'ㄱ')
+        assertEquals(codaGiyeok.toCompatiblePhonome?.char, 'ㄱ')
         assertTrue(codaGiyeok.isConsonant)
         assertTrue(codaGiyeok.isModern)
         assertEquals(codaGiyeok.keyboardSet, KeyboardSet.THREE_SET)
