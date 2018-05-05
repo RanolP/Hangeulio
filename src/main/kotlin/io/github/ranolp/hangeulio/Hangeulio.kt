@@ -24,10 +24,13 @@ fun isMoeum(char: Char): Boolean = isVowel(char)
 @Deprecated("Moum is 모음's phonetic, So, use isVowel instead.", ReplaceWith("isVowel(char)"))
 fun isMoum(char: Char): Boolean = isVowel(char)
 
+fun isModernHangeulSyllable(char: Char): Boolean {
+    return char in HANGUL_SYLLABLES
+}
+
 fun isHangeulSyllable(string: String): Boolean {
     if (string.length == 1) {
-        // 현대 한글 가..힣
-        return string[0] in '가'..'힣'
+        return isModernHangeulSyllable(string[0])
     }
     // TODO: Normalize 해야하는 상태의 경우
     // TODO: 옛 한글 상태의 경우
