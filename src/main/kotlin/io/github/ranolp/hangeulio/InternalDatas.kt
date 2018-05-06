@@ -27,12 +27,6 @@ internal val HANGUL_LETTER_VOWEL = 'ㅏ'..'ㅣ'
 internal const val WON_SIGN = '₩'
 internal const val FULLWIDTH_WON_SIGN = '￦'
 
-/*
- * 중세 한국어의 성조 표기를 위한 문자
- */
-internal const val HANGUL_SINGLE_DOT_TONE_MARK = '〮'
-internal const val HANGUL_DOUBLE_DOT_TONE_MARK = '〯'
-
 internal val PARENTHESIZED_HANGUL_LETTERS = '㈀'..'㈍'
 internal val PARENTHESIZED_HANGUL_SYLLABLES = '㈎'..'㈛'
 internal val PARENTHESIZED_KOREAN_WORDS = "㈜㈝㈞"

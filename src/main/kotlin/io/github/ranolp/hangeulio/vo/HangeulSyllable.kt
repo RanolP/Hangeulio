@@ -1,5 +1,7 @@
 package io.github.ranolp.hangeulio.vo
 
+import io.github.ranolp.hangeulio.isHangeulSyllable
+import io.github.ranolp.hangeulio.isIPFHangeulSyllable
 import io.github.ranolp.hangeulio.isModernHangeulSyllable
 import java.text.Normalizer
 
@@ -22,7 +24,8 @@ import java.text.Normalizer
 class HangeulSyllable private constructor(
     val onset: HangeulPhoneme,
     val nucleus: HangeulPhoneme,
-    val coda: HangeulPhoneme?
+    val coda: HangeulPhoneme?,
+    val tone: Tone?
 ) {
     companion object {
         @JvmStatic
@@ -30,8 +33,19 @@ class HangeulSyllable private constructor(
         operator fun invoke(
             onset: HangeulPhoneme,
             nucleus: HangeulPhoneme,
-            coda: HangeulPhoneme? = null
-        ): HangeulSyllable = HangeulSyllable(onset, nucleus, coda)
+            coda: HangeulPhoneme? = null,
+            tone: Tone? = null
+        ): HangeulSyllable = HangeulSyllable(onset, nucleus, coda, tone)
+
+        @JvmStatic
+        @JvmName("of")
+        operator fun invoke(
+            onset: Char,
+            nucleus: Char,
+            coda: Char? = null,
+            tone: Tone? = null
+        ): HangeulSyllable =
+            HangeulSyllable(HangeulPhoneme(onset), HangeulPhoneme(nucleus), coda?.let { HangeulPhoneme(it) }, tone)
 
         @JvmStatic
         @JvmName("of")
@@ -50,33 +64,72 @@ class HangeulSyllable private constructor(
                 else -> throw Exception("Normalized value is not correct: $normalized")
             }
         }
+
+        @JvmStatic
+        @JvmName("of")
+        operator fun invoke(string: String): HangeulSyllable {
+            if (isIPFHangeulSyllable(string)) {
+                return Tone.values().firstOrNull { it.char == string[string.length - 1] }?.let {
+                    if (string.length == 3) HangeulSyllable(string[0], string[1], tone = it)
+                    else HangeulSyllable(string[0], string[1], string[2], it)
+                } ?: if (string.length == 2) HangeulSyllable(string[0], string[1])
+                else HangeulSyllable(string[0], string[1], string[2])
+            }
+            if (!isHangeulSyllable(string)) {
+                throw Exception("$string is not a hangeul")
+            }
+            if (string.length == 1) {
+                return HangeulSyllable(string[0])
+            } else {
+                throw Exception("$string is not a hangeul")
+            }
+        }
     }
 
     /**
-     * The alias of onset
+     * The alias of [onset]
      */
     val initialSound: HangeulPhoneme
         get() = onset
 
     /**
-     * The alias of onset
+     * The alias of [onset]
      */
     val firstSound: HangeulPhoneme
         get() = onset
 
-    @Deprecated("choseong is 초성's phonetic. So, have to use onset instead.", ReplaceWith("onset"))
+    /**
+     * The alias of [nucleus]
+     */
+    val peakSound: HangeulPhoneme
+        get() = nucleus
+
+    /**
+     * The alias of [coda]
+     */
+    val finalSound: HangeulPhoneme
+        get() = onset
+
+
+    @Deprecated("choseong is 초성's phonetic. So, use onset instead.", ReplaceWith("onset"))
     val choSeong: HangeulPhoneme
         get() = onset
 
-    @Deprecated("choseong is 초성's phonetic. So, have to use nucleus instead.", ReplaceWith("onset"))
+    @Deprecated("choseong is 초성's phonetic. So, use nucleus instead.", ReplaceWith("onset"))
     val jungSeong: HangeulPhoneme
         get() = nucleus
 
-    @Deprecated("choseong is 초성's phonetic. So, have to use coda instead.", ReplaceWith("onset"))
+    @Deprecated("choseong is 초성's phonetic. So, use coda instead.", ReplaceWith("onset"))
     val jongSeong: HangeulPhoneme?
         get() = coda
 
-    val toOnlyCompatible: HangeulSyllable by lazy {
+    val isModernHangeul: Boolean by lazy {
+        onset.toCompatiblePhonome != null && nucleus.toCompatiblePhonome != null && coda?.let {
+            it.toCompatiblePhonome != null
+        } ?: true
+    }
+
+    val modernize: HangeulSyllable by lazy {
         HangeulSyllable(onset.toCompatiblePhonome!!, nucleus.toCompatiblePhonome!!, coda?.toCompatiblePhonome)
     }
 }

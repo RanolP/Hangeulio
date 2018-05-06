@@ -3,6 +3,7 @@
 package io.github.ranolp.hangeulio
 
 import io.github.ranolp.hangeulio.vo.HangeulPhoneme
+import io.github.ranolp.hangeulio.vo.Tone
 
 fun isConsonant(char: Char): Boolean = HangeulPhoneme(char).isConsonant
 
@@ -43,13 +44,23 @@ fun isModernHangeulSyllable(char: Char): Boolean {
     return char in HANGUL_SYLLABLES
 }
 
+fun isIPFHangeulSyllable(string: String): Boolean {
+    return if (string.length <= 1) {
+        false
+    } else Tone.values().firstOrNull { it.char == string[string.length - 1] }?.let {
+        isIPFHangeulSyllable(string.substring(0, string.length - 1))
+    } ?: when (string.length) {
+        2 -> string[0] in HANGUL_ONSET_MODERN + HANGUL_ONSET_OLD && string[1] in HANGUL_NUCLEUS_MODERN + HANGUL_NUCLEUS_OLD
+        3 -> string[2] in HANGUL_CODA_MODERN + HANGUL_CODA_OLD && isIPFHangeulSyllable(string.substring(0, 2))
+        else -> false
+    }
+}
+
 fun isHangeulSyllable(string: String): Boolean {
     if (string.length == 1) {
         return isModernHangeulSyllable(string[0])
     }
-    // TODO: Normalize 해야하는 상태의 경우
-    // TODO: 옛 한글 상태의 경우
-    return false
+    return isIPFHangeulSyllable(string)
 }
 
 /**

@@ -31,3 +31,8 @@ enum class KeyboardSet(val id: Int) {
 
     abstract fun isSimilar(other: KeyboardSet): Boolean
 }
+
+enum class Tone(val char: Char) {
+    SINGLE_DOT('〮'),
+    DOUBLE_DOT('〯')
+}
