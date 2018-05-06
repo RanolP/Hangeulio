@@ -27,6 +27,7 @@ class HangeulPhoneme private constructor(type: Type, val keyboardSet: KeyboardSe
          * @return 캐싱된 음소를 갖고 옵니다. 없다면 새로 만들어 캐싱합니다.
          * @throws Exception 올바르지 않은 한글 문자일 경우 예외가 발생합니다.
          */
+        @JvmStatic
         @JvmName("of")
         operator fun invoke(char: Char): HangeulPhoneme = cachePool.getOrPut(char) {
             when (char) {
