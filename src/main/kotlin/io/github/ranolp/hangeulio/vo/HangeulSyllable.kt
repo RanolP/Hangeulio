@@ -124,12 +124,12 @@ class HangeulSyllable private constructor(
         get() = coda
 
     val isModernHangeul: Boolean by lazy {
-        onset.toCompatiblePhonome != null && nucleus.toCompatiblePhonome != null && coda?.let {
-            it.toCompatiblePhonome != null
+        onset.toCompatiblePhoneme != null && nucleus.toCompatiblePhoneme != null && coda?.let {
+            it.toCompatiblePhoneme != null
         } ?: true
     }
 
     val modernize: HangeulSyllable by lazy {
-        HangeulSyllable(onset.toCompatiblePhonome!!, nucleus.toCompatiblePhonome!!, coda?.toCompatiblePhonome)
+        HangeulSyllable(onset.toCompatiblePhoneme!!, nucleus.toCompatiblePhoneme!!, coda?.toCompatiblePhoneme)
     }
 }

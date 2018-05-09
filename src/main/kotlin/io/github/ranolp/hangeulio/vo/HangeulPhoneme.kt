@@ -107,6 +107,7 @@ class HangeulPhoneme private constructor(type: Type, val keyboardSet: KeyboardSe
     /**
      * 첫 소리가 될 수 있는 여부
      */
+    @get:JvmName("canBeOnset")
     val canBeOnset: Boolean by lazy {
         isConsonant && if (keyboardSet !== KeyboardSet.TWO_SET) {
             when (char) {
@@ -120,8 +121,9 @@ class HangeulPhoneme private constructor(type: Type, val keyboardSet: KeyboardSe
     /**
      * 가운데 소리가 될 수 있는 여부
      */
+    @get:JvmName("canBeNucleus")
     val canBeNucleus: Boolean by lazy {
-        isConsonant && if (keyboardSet !== KeyboardSet.TWO_SET) {
+        isVowel && if (keyboardSet !== KeyboardSet.TWO_SET) {
             when (char) {
                 in HANGUL_NUCLEUS_MODERN,
                 in HANGUL_NUCLEUS_OLD -> true
@@ -134,6 +136,7 @@ class HangeulPhoneme private constructor(type: Type, val keyboardSet: KeyboardSe
     /**
      * 끝 소리가 될 수 있는 여부
      */
+    @get:JvmName("canBeCoda")
     val canBeCoda: Boolean by lazy {
         isConsonant && if (keyboardSet !== KeyboardSet.TWO_SET) {
             when (char) {
@@ -147,6 +150,7 @@ class HangeulPhoneme private constructor(type: Type, val keyboardSet: KeyboardSe
     /**
      * 가능한 경우, 현대 한글이나 옛한글로 변환한 값
      */
+    @get:JvmName("toNormalizable")
     val toNormalizable: HangeulPhoneme? by lazy {
         if (isNotModern && isNotOld) {
             when (char) {
@@ -161,7 +165,8 @@ class HangeulPhoneme private constructor(type: Type, val keyboardSet: KeyboardSe
     /**
      * 가능한 경우, 호환 한글 자모로 변환한 값
      */
-    val toCompatiblePhonome: HangeulPhoneme? by lazy {
+    @get:JvmName("toCompatiblePhoneme")
+    val toCompatiblePhoneme: HangeulPhoneme? by lazy {
         if (isModern) {
             when (char) {
                 in HANGUL_LETTER_CONSONANT,
@@ -173,7 +178,7 @@ class HangeulPhoneme private constructor(type: Type, val keyboardSet: KeyboardSe
                 else -> null
             }
         } else {
-            toNormalizable?.toCompatiblePhonome
+            toNormalizable?.toCompatiblePhoneme
         }
     }
 
@@ -184,7 +189,7 @@ class HangeulPhoneme private constructor(type: Type, val keyboardSet: KeyboardSe
         isVowel -> "Vowel"
         else -> "Unknown"
     }}, keyboardSet=$keyboardSet, char=$char${toNormalizable?.char?.takeIf { it != char }?.let { ", modernChar=$it" }
-            ?: ""}${toCompatiblePhonome?.char?.takeIf { it != char }?.let { ", compatChar=$it" } ?: ""})"
+            ?: ""}${toCompatiblePhoneme?.char?.takeIf { it != char }?.let { ", compatChar=$it" } ?: ""})"
 
     /**
      * 같은 '벌'일 때(알 수 없는 경우 두벌식으로 가정함), 문자가 같은지 비교합니다.
@@ -195,9 +200,7 @@ class HangeulPhoneme private constructor(type: Type, val keyboardSet: KeyboardSe
 
         other as HangeulPhoneme
 
-        if (!keyboardSet.isSimilar(other.keyboardSet)) return false
-
-        return toNormalizable?.char == other.toNormalizable?.char
+        return keyboardSet.isSimilar(other.keyboardSet) && toNormalizable?.char == other.toNormalizable?.char
     }
 
     override fun hashCode(): Int {
