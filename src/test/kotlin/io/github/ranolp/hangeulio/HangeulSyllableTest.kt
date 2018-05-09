@@ -2,8 +2,7 @@ package io.github.ranolp.hangeulio
 
 import io.github.ranolp.hangeulio.vo.HangeulSyllable
 import io.github.ranolp.hangeulio.vo.Tone
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
 
 class HangeulSyllableTest {
@@ -28,7 +27,7 @@ class HangeulSyllableTest {
         val oldSyllableWithToneMark = HangeulSyllable("ᄊᆡ〮")
         assertEquals(oldSyllableWithToneMark.onset.char, 'ᄊ')
         assertEquals(oldSyllableWithToneMark.nucleus.char, 'ᆡ')
-        assertEquals(oldSyllableWithToneMark.coda?.char, null)
+        assertNull(oldSyllableWithToneMark.coda)
         assertEquals(oldSyllableWithToneMark.tone, Tone.SINGLE_DOT)
     }
 }
