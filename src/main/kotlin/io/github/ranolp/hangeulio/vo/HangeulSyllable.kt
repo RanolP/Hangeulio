@@ -132,4 +132,9 @@ class HangeulSyllable private constructor(
     val modernize: HangeulSyllable by lazy {
         HangeulSyllable(onset.toCompatiblePhoneme!!, nucleus.toCompatiblePhoneme!!, coda?.toCompatiblePhoneme)
     }
+
+    operator fun component1(): HangeulPhoneme = onset
+    operator fun component2(): HangeulPhoneme = nucleus
+    operator fun component3(): HangeulPhoneme? = coda
+    operator fun component4(): Tone? = tone
 }
