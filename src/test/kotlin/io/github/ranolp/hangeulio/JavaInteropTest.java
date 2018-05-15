@@ -60,5 +60,11 @@ public class JavaInteropTest {
         assertTrue(Hangeulio.isHangeulSyllable("굉"));
         assertTrue(Hangeulio.isHangeulSyllable("ᄊᆡ〮"));
         assertTrue(Hangeulio.isHangeulSyllable("ᄣᆗᇌ"));
+
+        assertTrue(Hangeulio.hasCoda("각"));
+        assertTrue(Hangeulio.hasCoda("굉"));
+        assertFalse(Hangeulio.hasCoda("ᄊᆡ〮"));
+        assertFalse(Hangeulio.hasCoda("A"));
+        assertTrue(Hangeulio.hasCoda("ᄣᆗᇌ"));
     }
 }

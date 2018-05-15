@@ -3,6 +3,7 @@
 package io.github.ranolp.hangeulio
 
 import io.github.ranolp.hangeulio.vo.HangeulPhoneme
+import io.github.ranolp.hangeulio.vo.HangeulSyllable
 import io.github.ranolp.hangeulio.vo.Tone
 
 fun isConsonant(char: Char): Boolean = HangeulPhoneme(char).isConsonant
@@ -72,3 +73,6 @@ fun isHangeulSyllable(string: String): Boolean {
     ReplaceWith("isHangeulSyllable(string)")
 )
 fun isHangulSyllable(string: String): Boolean = isHangeulSyllable(string)
+
+fun hasCoda(string: String): Boolean =
+    string.takeIf { isHangeulSyllable(it) }?.run { HangeulSyllable(this) }?.coda !== null
