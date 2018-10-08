@@ -2,8 +2,10 @@ package io.github.ranolp.hangeulio
 
 import io.github.ranolp.hangeulio.vo.HangeulPhoneme
 import io.github.ranolp.hangeulio.vo.KeyboardSet
-import org.junit.Assert.*
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class HangeulPhonemeTest {
     val giyeok = HangeulPhoneme('ㄱ')

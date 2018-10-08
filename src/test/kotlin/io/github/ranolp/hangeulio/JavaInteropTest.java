@@ -2,9 +2,9 @@ package io.github.ranolp.hangeulio;
 
 import io.github.ranolp.hangeulio.vo.HangeulPhoneme;
 import io.github.ranolp.hangeulio.vo.HangeulSyllable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class JavaInteropTest {
     @Test

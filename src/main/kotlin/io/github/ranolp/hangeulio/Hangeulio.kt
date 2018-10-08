@@ -52,6 +52,10 @@ fun isHangeulSyllable(string: String): Boolean {
     return isIPFHangeulSyllable(string)
 }
 
+fun isHangeulSyllable(char: Char): Boolean {
+    return isModernHangeulSyllable(char)
+}
+
 /**
  * The alias of [isHangeulSyllable], han'gŭl(or hangul) is McCune-Reischauer system notation of 한글,
  * 'Hangeul' is official in South Korea, since 2000
@@ -63,3 +67,5 @@ fun isHangulSyllable(string: String): Boolean = isHangeulSyllable(string)
 
 fun hasCoda(string: String): Boolean =
     string.takeIf { isHangeulSyllable(it) }?.run { HangeulSyllable(this) }?.coda !== null
+
+fun hasCoda(c: Char): Boolean = c.takeIf { isHangeulSyllable(it) }?.run { HangeulSyllable(this) }?.coda !== null

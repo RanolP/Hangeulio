@@ -2,8 +2,10 @@ package io.github.ranolp.hangeulio
 
 import io.github.ranolp.hangeulio.vo.HangeulSyllable
 import io.github.ranolp.hangeulio.vo.Tone
-import org.junit.Assert.*
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class HangeulSyllableTest {
     @Test
