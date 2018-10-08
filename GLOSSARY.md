@@ -18,3 +18,11 @@
 다음과 같이 나타낸다고 합니다.
 그러니 choseong, jungseong, jongseong 등의 음차한 표기 대신,
 onset, nucleus, coda 등의 표기를 사용합니다.
+
+## Phoneme
+
+음소를 나타내는 영단어입니다.
+
+## Conjugation
+
+동사의 활용을 나타내는 영단어입니다.
