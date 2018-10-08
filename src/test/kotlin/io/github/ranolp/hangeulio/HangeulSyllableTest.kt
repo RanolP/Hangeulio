@@ -30,4 +30,21 @@ class HangeulSyllableTest {
         assertNull(oldSyllableWithToneMark.coda)
         assertEquals(oldSyllableWithToneMark.tone, Tone.SINGLE_DOT)
     }
+
+    @Test
+    fun testStringfy() {
+        val syllable = HangeulSyllable('ㄱ', 'ㅏ', 'ㄴ')
+        assertEquals(syllable.stringfy, "간")
+
+        val syllableCompat = syllable.modernize
+        assertEquals(syllableCompat.onset.char, 'ㄱ')
+        assertEquals(syllableCompat.nucleus.char, 'ㅏ')
+        assertEquals(syllableCompat.coda?.char, 'ㄴ')
+
+        val oldSyllable = HangeulSyllable('ᄣ', 'ᆗ', 'ᇌ')
+        assertEquals(oldSyllable.stringfy, "ᄣᆗᇌ")
+
+        val oldSyllableWithToneMark = HangeulSyllable('ᄊ', 'ᆡ', tone = Tone.SINGLE_DOT)
+        assertEquals(oldSyllableWithToneMark.stringfy, "ᄊᆡ〮")
+    }
 }

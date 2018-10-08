@@ -14,6 +14,7 @@ class HangeulSyllable private constructor(
     val coda: HangeulPhoneme?,
     val tone: Tone?
 ) {
+
     companion object {
         @JvmStatic
         @JvmName("of")
@@ -22,17 +23,19 @@ class HangeulSyllable private constructor(
             nucleus: HangeulPhoneme,
             coda: HangeulPhoneme? = null,
             tone: Tone? = null
-        ): HangeulSyllable = HangeulSyllable(onset, nucleus, coda, tone)
+        ): HangeulSyllable {
+            return if (tone != null && onset.isModern && nucleus.isModern && coda?.isNotModern != true) {
+                HangeulSyllable(onset, nucleus, coda)
+            } else {
+                HangeulSyllable(onset, nucleus, coda, tone)
+            }
+        }
 
         @JvmStatic
         @JvmName("of")
-        operator fun invoke(
-            onset: Char,
-            nucleus: Char,
-            coda: Char? = null,
-            tone: Tone? = null
-        ): HangeulSyllable =
-            HangeulSyllable(HangeulPhoneme(onset), HangeulPhoneme(nucleus), coda?.let { HangeulPhoneme(it) }, tone)
+        operator fun invoke(onset: Char, nucleus: Char, coda: Char? = null, tone: Tone? = null): HangeulSyllable {
+            return invoke(HangeulPhoneme(onset), HangeulPhoneme(nucleus), coda?.let { HangeulPhoneme(it) }, tone)
+        }
 
         @JvmStatic
         @JvmName("of")
@@ -41,26 +44,33 @@ class HangeulSyllable private constructor(
                 throw Exception("$char is not a hangeul")
             }
             val normalized = Normalizer.normalize(char.toString(), Normalizer.Form.NFD)
-            return when (normalized.length) {
-                2 -> HangeulSyllable(HangeulPhoneme(normalized[0]), HangeulPhoneme(normalized[1]), null)
-                3 -> HangeulSyllable(
-                    HangeulPhoneme(normalized[0]),
-                    HangeulPhoneme(normalized[1]),
-                    HangeulPhoneme(normalized[2])
-                )
-                else -> throw Exception("Normalized value is not correct: $normalized")
+            if (normalized.length != 2 && normalized.length != 3) {
+                error("Normalized value is not correct: $normalized")
             }
+            val onset = HangeulPhoneme(normalized[0])
+            val nucleus = HangeulPhoneme(normalized[1])
+            val coda = if (normalized.length == 3) HangeulPhoneme(normalized[2]) else null
+            return HangeulSyllable(onset, nucleus, coda)
         }
 
         @JvmStatic
         @JvmName("of")
         operator fun invoke(string: String): HangeulSyllable {
             if (isIPFHangeulSyllable(string)) {
-                return Tone.values().firstOrNull { it.char == string[string.length - 1] }?.let {
-                    if (string.length == 3) HangeulSyllable(string[0], string[1], tone = it)
-                    else HangeulSyllable(string[0], string[1], string[2], it)
-                } ?: if (string.length == 2) HangeulSyllable(string[0], string[1])
-                else HangeulSyllable(string[0], string[1], string[2])
+                val tone = Tone.values().firstOrNull { it.char == string[string.length - 1] }
+                return if (tone != null) {
+                    if (string.length == 3) {
+                        HangeulSyllable(string[0], string[1], tone = tone)
+                    } else {
+                        HangeulSyllable(string[0], string[1], string[2], tone)
+                    }
+                } else {
+                    if (string.length == 2) {
+                        HangeulSyllable(string[0], string[1])
+                    } else {
+                        HangeulSyllable(string[0], string[1], string[2])
+                    }
+                }
             }
             if (!isHangeulSyllable(string)) {
                 throw Exception("$string is not a hangeul")
@@ -114,6 +124,13 @@ class HangeulSyllable private constructor(
         onset.toCompatiblePhoneme != null && nucleus.toCompatiblePhoneme != null && coda?.let {
             it.toCompatiblePhoneme != null
         } ?: true
+    }
+
+    val stringfy by lazy {
+        Normalizer.normalize(
+            "${onset.asOnsetCharacter ?: onset.char}${nucleus.asNucleusCharacter ?: nucleus.char}${coda?.asCodaCharacter
+                ?: coda?.char ?: ""}${tone?.char ?: ""}", Normalizer.Form.NFC
+        )
     }
 
     val modernize: HangeulSyllable by lazy {
