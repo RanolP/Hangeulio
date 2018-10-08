@@ -69,3 +69,6 @@ fun hasCoda(string: String): Boolean =
     string.takeIf { isHangeulSyllable(it) }?.run { HangeulSyllable(this) }?.coda !== null
 
 fun hasCoda(c: Char): Boolean = c.takeIf { isHangeulSyllable(it) }?.run { HangeulSyllable(this) }?.coda !== null
+
+val String.lastHangeulPronounce: Char?
+    get() = lastOrNull()
