@@ -1,6 +1,8 @@
 package io.github.ranolp.hangeulio.vo
 
 import io.github.ranolp.hangeulio.CIRCLED_HANGUL_LETTERS
+import io.github.ranolp.hangeulio.COMPAT_CODA
+import io.github.ranolp.hangeulio.COMPAT_ONSET
 import io.github.ranolp.hangeulio.HALFWIDTH_HANGUL_LETTER_CONSONANT
 import io.github.ranolp.hangeulio.HALFWIDTH_HANGUL_LETTER_VOWEL
 import io.github.ranolp.hangeulio.HANGUL_CODA_MODERN
@@ -44,33 +46,23 @@ class HangeulPhoneme private constructor(type: Type, val keyboardSet: KeyboardSe
         operator fun invoke(char: Char): HangeulPhoneme = cachePool.getOrPut(char) {
             when (char) {
                 in HALFWIDTH_HANGUL_LETTER_CONSONANT, in HANGUL_LETTER_CONSONANT -> HangeulPhoneme(
-                    Type.CONSONANT,
-                    KeyboardSet.TWO_SET,
-                    char
+                    Type.CONSONANT, KeyboardSet.TWO_SET, char
                 )
 
                 in HALFWIDTH_HANGUL_LETTER_VOWEL, in HANGUL_LETTER_VOWEL -> HangeulPhoneme(
-                    Type.VOWEL,
-                    KeyboardSet.TWO_SET,
-                    char
+                    Type.VOWEL, KeyboardSet.TWO_SET, char
                 )
 
                 in HANGUL_ONSET_MODERN, in HANGUL_ONSET_OLD, in HANGUL_CODA_MODERN, in HANGUL_CODA_OLD -> HangeulPhoneme(
-                    Type.CONSONANT,
-                    KeyboardSet.THREE_SET,
-                    char
+                    Type.CONSONANT, KeyboardSet.THREE_SET, char
                 )
 
                 in HANGUL_NUCLEUS_MODERN, in HANGUL_NUCLEUS_OLD -> HangeulPhoneme(
-                    Type.VOWEL,
-                    KeyboardSet.THREE_SET,
-                    char
+                    Type.VOWEL, KeyboardSet.THREE_SET, char
                 )
 
                 in PARENTHESIZED_HANGUL_LETTERS, in CIRCLED_HANGUL_LETTERS -> HangeulPhoneme(
-                    Type.CONSONANT,
-                    KeyboardSet.UNDEFINED,
-                    char
+                    Type.CONSONANT, KeyboardSet.UNDEFINED, char
                 )
 
                 // todo: replace with own exception
@@ -227,9 +219,9 @@ class HangeulPhoneme private constructor(type: Type, val keyboardSet: KeyboardSe
             when (char) {
                 in HANGUL_LETTER_CONSONANT, in HANGUL_LETTER_VOWEL -> this
 
-                in HANGUL_ONSET_MODERN -> invoke(char + 0x2031)
+                in HANGUL_ONSET_MODERN -> invoke(COMPAT_ONSET[HANGUL_ONSET_MODERN.indexOf(char)])
                 in HANGUL_NUCLEUS_MODERN -> invoke(char + 0x1fee)
-                in HANGUL_CODA_MODERN -> invoke(char + 0x1f89)
+                in HANGUL_CODA_MODERN -> invoke(COMPAT_CODA[HANGUL_CODA_MODERN.indexOf(char)])
                 else -> null
             }
         } else {
